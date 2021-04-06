@@ -1,0 +1,3 @@
+This is a demonstration package for GNU Automake and ICU4c
+The main purpose of this app is to try to use icu4c with this package and gnu autotools
+
