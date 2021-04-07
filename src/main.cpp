@@ -8,7 +8,6 @@
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
 
-
 static void
 printUnicodeString(const char *announce, const icu::UnicodeString &s) {
     static char out[200];
