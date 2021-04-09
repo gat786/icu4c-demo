@@ -1,0 +1,6 @@
+{
+    hello {"Hola mundo"}
+    help {"Este es un mensaje de ayuda"}
+    support {"Este es un mensaje de apoyo"}
+    end {"Este programa terminará ahora"}
+}
