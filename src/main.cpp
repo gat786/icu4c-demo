@@ -22,28 +22,44 @@ printUnicodeString(const char *announce, const icu::UnicodeString &s) {
     // Production code should be aware of what encoding is required,
     // and use a UConverter or at least a charset name explicitly.
     out[s.extract(0, 99, out)]=0;
-    printf("%s%s {", announce, out);
+    printf("%s%s \n", announce, out);
 
-    // output the code units (not code points)
-    length=s.length();
-    for(i=0; i<length; ++i) {
-        printf(" %04x", s.charAt(i));
-    }
-    printf(" }\n");
+    // // output the code units (not code points)
+    // length=s.length();
+    // for(i=0; i<length; ++i) {
+    //     printf(" %04x", s.charAt(i));
+    // }
+    // printf(" }\n");
 };
 
 int main(){
 	static const UChar input[]={
-        0x61, 0x42, 0x3a3,
-        0x69, 0x49, 0x131, 0x130, 0x20,
-        0xdf, 0x20, 0xfb03,
-        0x3c2, 0x3c3, 0x3a3, 0
+        0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0
     };
 
+    
+
 	icu::UnicodeString s(input), t;
-	const icu::Locale &en = icu::Locale::getEnglish();
-	icu::Locale tr("tr");
+    const icu::Locale &system = icu::Locale::getDefault();
+	const icu::Locale &chinese = icu::Locale::getChinese();
+	icu::Locale hi("hi","IN");
 
 	printUnicodeString("input string: ",s);
+    /* lowercase/English */
+    printUnicodeString("full-lowercased/en: ", (t=s).toLower(chinese));
+    /* lowercase/Turkish */
+    printUnicodeString("full-lowercased/tr: ", (t=s).toLower(hi));
+    /* uppercase/English */
+    printUnicodeString("full-uppercased/en: ", (t=s).toUpper(chinese));
+    /* uppercase/Turkish */
+    printUnicodeString("full-uppercased/tr: ", (t=s).toUpper(hi));
+    /* titlecase/English */
+    printUnicodeString("full-titlecased/en: ", (t=s).toTitle(NULL, chinese));
+    /* titlecase/Turkish */
+    printUnicodeString("full-titlecased/tr: ", (t=s).toTitle(NULL, hi));
+    /* case-folde/default */
+    printUnicodeString("full-case-folded/default: ", (t=s).foldCase(U_FOLD_CASE_DEFAULT));
+    /* case-folde/Turkic */
+    printUnicodeString("full-case-folded/Turkic: ", (t=s).foldCase(U_FOLD_CASE_EXCLUDE_SPECIAL_I));
 	return 0;
 }
