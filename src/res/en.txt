@@ -1,4 +1,4 @@
-{
+en{
     hello {"Hello World"}
     help {"This is help message"}
     support {"This is support message"}
