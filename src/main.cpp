@@ -7,6 +7,7 @@
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
+#include "unicode/resbund.h"
 
 static void
 printUnicodeString(const char *announce, const icu::UnicodeString &s) {
@@ -33,33 +34,26 @@ printUnicodeString(const char *announce, const icu::UnicodeString &s) {
 };
 
 int main(){
-	static const UChar input[]={
-        0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0
-    };
+    UErrorCode status = U_ZERO_ERROR;
+	UResourceBundle *hindi = ures_open(NULL,"es",&status);
+    if(U_SUCCESS(status)){
+        std::cout << "Found the resource" << std::endl;
 
-    
-
-	icu::UnicodeString s(input), t;
-    const icu::Locale &system = icu::Locale::getDefault();
-	const icu::Locale &chinese = icu::Locale::getChinese();
-	icu::Locale hi("hi","IN");
-
-	printUnicodeString("input string: ",s);
-    /* lowercase/English */
-    printUnicodeString("full-lowercased/en: ", (t=s).toLower(chinese));
-    /* lowercase/Turkish */
-    printUnicodeString("full-lowercased/tr: ", (t=s).toLower(hi));
-    /* uppercase/English */
-    printUnicodeString("full-uppercased/en: ", (t=s).toUpper(chinese));
-    /* uppercase/Turkish */
-    printUnicodeString("full-uppercased/tr: ", (t=s).toUpper(hi));
-    /* titlecase/English */
-    printUnicodeString("full-titlecased/en: ", (t=s).toTitle(NULL, chinese));
-    /* titlecase/Turkish */
-    printUnicodeString("full-titlecased/tr: ", (t=s).toTitle(NULL, hi));
-    /* case-folde/default */
-    printUnicodeString("full-case-folded/default: ", (t=s).foldCase(U_FOLD_CASE_DEFAULT));
-    /* case-folde/Turkic */
-    printUnicodeString("full-case-folded/Turkic: ", (t=s).foldCase(U_FOLD_CASE_EXCLUDE_SPECIAL_I));
+        char hello;
+        int hello_length = 12;
+        ures_getUTF8String(hindi,&hello, &hello_length,false, &status);
+        std::cout << hello << std::endl;
+        // int len = 100;
+        // const UChar *result = ures_getStringByKey(english,"hello",&len,&status);
+        // if(U_SUCCESS(status)){
+        //     std::cout << result << std::endl;
+        // }
+        // else{
+        //     std::cout << "Couldn't find the string" << std::endl;
+        // }
+    }
+    else{
+        std::cout << "Error Finding Bundle" << std::endl;
+    }
 	return 0;
 }
