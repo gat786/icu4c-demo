@@ -33,24 +33,59 @@ printUnicodeString(const char *announce, const icu::UnicodeString &s) {
     // printf(" }\n");
 };
 
+static UChar *quotedString(const UChar *string) {
+    int len = u_strlen(string);
+    int alen = len;
+    const UChar *sp;
+    UChar *newstr, *np;
+
+    for (sp = string; *sp; ++sp) {
+        switch (*sp) {
+            case '\n':
+            case 0x0022:
+                ++alen;
+                break;
+        }
+    }
+
+    newstr = (UChar *) malloc((1 + alen) * sizeof(*newstr));
+    for (sp = string, np = newstr; *sp; ++sp) {
+        switch (*sp) {
+            case '\n':
+                *np++ = 0x005C;
+                *np++ = 0x006E;
+                break;
+
+            case 0x0022:
+                *np++ = 0x005C;
+                
+            default:
+                *np++ = *sp;
+                break;
+        }
+    }
+    *np = 0;
+
+    return newstr;
+}
+
 int main(){
     UErrorCode status = U_ZERO_ERROR;
-	UResourceBundle *hindi = ures_open(NULL,"es",&status);
+	UResourceBundle *english = ures_open("./src/resb","en",&status);
     if(U_SUCCESS(status)){
         std::cout << "Found the resource" << std::endl;
 
-        char hello;
-        int hello_length = 12;
-        ures_getUTF8String(hindi,&hello, &hello_length,false, &status);
-        std::cout << hello << std::endl;
-        // int len = 100;
-        // const UChar *result = ures_getStringByKey(english,"hello",&len,&status);
-        // if(U_SUCCESS(status)){
-        //     std::cout << result << std::endl;
-        // }
-        // else{
-        //     std::cout << "Couldn't find the string" << std::endl;
-        // }
+        std::cout << english << std::endl;
+
+        int len = 11;
+        char *result;
+        ures_getUTF8StringByIndex(english, 0, result, &len, true, &status);
+        if(U_SUCCESS(status)){
+            std::cout << result << std::endl;
+        }
+        else{
+            std::cout << "Couldn't find the string" << std::endl;
+        }
     }
     else{
         std::cout << "Error Finding Bundle" << std::endl;
