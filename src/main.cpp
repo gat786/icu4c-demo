@@ -67,25 +67,31 @@ static UChar *quotedString(const UChar *string) {
     *np = 0;
 
     return newstr;
-}
+};
 
 int main(){
     UErrorCode status = U_ZERO_ERROR;
-	UResourceBundle *english = ures_open("./src/resb","en",&status);
+	UResourceBundle *english = ures_open("./src/res","hi",&status);
     if(U_SUCCESS(status)){
         std::cout << "Found the resource" << std::endl;
 
-        std::cout << english << std::endl;
 
         int len = 11;
-        char *result;
-        ures_getUTF8StringByIndex(english, 0, result, &len, true, &status);
-        if(U_SUCCESS(status)){
-            std::cout << result << std::endl;
-        }
-        else{
-            std::cout << "Couldn't find the string" << std::endl;
-        }
+        const UChar *key = ures_getString(english, &len, &status);
+        // std::string str(key);
+        std::cout << quotedString(key) << std::endl;
+
+        // std::cout << english << std::endl;
+
+        // char *result;
+        
+        // ures_getUTF8StringByKey(english, "hello", result, &len, true, &status);
+        // if(U_SUCCESS(status)){
+        //     std::cout << "Hello world" << std::endl;
+        // }
+        // else{
+        //     std::cout << "Couldn't find the string" << std::endl;
+        // }
     }
     else{
         std::cout << "Error Finding Bundle" << std::endl;

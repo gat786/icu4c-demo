@@ -1,5 +1,8 @@
 # http://www.gnu.org/software/automake
 
+*.res
+*.dat
+
 Makefile.in
 /ar-lib
 /mdate-sh
@@ -82,3 +85,4 @@ Makefile
 *.exe
 *.out
 *.app
+src/main.cpp
